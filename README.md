@@ -1,4 +1,8 @@
-Операционная система RAMFOS для компьютера Специалист МХ2
+# Specialist-ramfos
+
+Operating system RAMFOS for old soviet computer Specialist in MX2 modification
+
+Операционная система RAMFOS для старого советского компьютера Специалист МХ2
 
 Код еще не прибран!
 
