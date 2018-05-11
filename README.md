@@ -1,4 +1,4 @@
-# Specialist-ramfos
+# RAMFOS
 
 Operating system RAMFOS for old soviet computer Specialist in MX2 modification
 
