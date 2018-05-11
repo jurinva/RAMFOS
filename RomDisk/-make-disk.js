@@ -1,11 +1,11 @@
 //----------------------------------------------------------------------------
 // RAMFOS
-// Создание образа диска из отдельных файлов
+// РЎРѕР·РґР°РЅРёРµ РѕР±СЂР°Р·Р° РґРёСЃРєР° РёР· РѕС‚РґРµР»СЊРЅС‹С… С„Р°Р№Р»РѕРІ
 //
-// 2013-11-01 Разработано vinxru
+// 2013-11-01 Р Р°Р·СЂР°Р±РѕС‚Р°РЅРѕ vinxru
 //----------------------------------------------------------------------------
 
-// Константы
+// РљРѕРЅСЃС‚Р°РЅС‚С‹
 
 unmlzOffset	= 0x0063;
 ramfosOffset	= 0x0430;
@@ -13,16 +13,16 @@ romdiskOffset	= 0x1880;
 romdiskSize	= 0x10000-4-romdiskOffset;
 loader1Offset	= 0x8000;
 
-// Стандартная ерунда
+// РЎС‚Р°РЅРґР°СЂС‚РЅР°СЏ РµСЂСѓРЅРґР°
 
 fso = new ActiveXObject("Scripting.FileSystemObject");
 shell = new ActiveXObject("WScript.Shell");
 function kill(name) { if(fso.FileExists(name)) fso.DeleteFile(name); }
 function fileSize(name) { return fso.GetFile(name).Size; }
-function loadAll(name) { return fso.OpenTextFile(name, 1, false, 0).Read(fileSize(name)); } // File.LoadAll глючит 
+function loadAll(name) { return fso.OpenTextFile(name, 1, false, 0).Read(fileSize(name)); } // File.LoadAll РіР»СЋС‡РёС‚ 
 src = loadAll("tbl.bin"); encode = []; decode = []; for(i=0; i<256; i++) { encode[i] = src.charAt(i); decode[src.charCodeAt(i)] = i; }
 
-// Расчет контрольной суммы файла
+// Р Р°СЃС‡РµС‚ РєРѕРЅС‚СЂРѕР»СЊРЅРѕР№ СЃСѓРјРјС‹ С„Р°Р№Р»Р°
 
 function specialistSum(data) {
   s = 0;
@@ -32,22 +32,22 @@ function specialistSum(data) {
   return (s & 0xFFFF);
 }
 
-// Удаляем временные файлы
+// РЈРґР°Р»СЏРµРј РІСЂРµРјРµРЅРЅС‹Рµ С„Р°Р№Р»С‹
 
 kill("list.tmp");
 
-// Создание списка файлов
+// РЎРѕР·РґР°РЅРёРµ СЃРїРёСЃРєР° С„Р°Р№Р»РѕРІ
 
 shell.Run("cmd /c dir /b /on *.* >list.tmp", 2, true);
 
-// Файлы, которые не надо добавлять на диск
+// Р¤Р°Р№Р»С‹, РєРѕС‚РѕСЂС‹Рµ РЅРµ РЅР°РґРѕ РґРѕР±Р°РІР»СЏС‚СЊ РЅР° РґРёСЃРє
 
 ignore = [];
 ignore["list.tmp"] = 1;
 ignore["tbl.bin"] = 1;
 ignore["-make-disk.js"] = 1;
 
-// Обрабатываем каждый файл
+// РћР±СЂР°Р±Р°С‚С‹РІР°РµРј РєР°Р¶РґС‹Р№ С„Р°Р№Р»
 
 dest = "";
 
@@ -55,32 +55,32 @@ list = fso.OpenTextFile("list.tmp", 1, false, 0);
 while(!list.AtEndOfStream) {
   fileName = list.readLine();
 
-  // Этот файл не нужен
+  // Р­С‚РѕС‚ С„Р°Р№Р» РЅРµ РЅСѓР¶РµРЅ
 
   if(ignore[fileName.toLowerCase()]) continue;
 
-  // Загружаем файл
+  // Р—Р°РіСЂСѓР¶Р°РµРј С„Р°Р№Р»
 
   data = loadAll(fileName);
   fileStartAddr = romdiskOffset + dest.length;
   startAddr = 0;
 
-  // Получаем адрес загрузки
+  // РџРѕР»СѓС‡Р°РµРј Р°РґСЂРµСЃ Р·Р°РіСЂСѓР·РєРё
 
   ext = fso.GetExtensionName(fileName).toUpperCase();
   if(ext == "RKS") {
-    // Получаем адрес загрузки из заголовка файла
+    // РџРѕР»СѓС‡Р°РµРј Р°РґСЂРµСЃ Р·Р°РіСЂСѓР·РєРё РёР· Р·Р°РіРѕР»РѕРІРєР° С„Р°Р№Р»Р°
     startAddr = decode[data.charCodeAt(0)] + decode[data.charCodeAt(1)] * 256;
     endAddr   = decode[data.charCodeAt(2)] + decode[data.charCodeAt(3)] * 256;
     len = endAddr - startAddr + 1;
     data = data.substr(4, len);    
   } else {
-    // Получаем адрес загрузки из имени файла
+    // РџРѕР»СѓС‡Р°РµРј Р°РґСЂРµСЃ Р·Р°РіСЂСѓР·РєРё РёР· РёРјРµРЅРё С„Р°Р№Р»Р°
     fileName = fso.GetBaseName(fileName);
     startAddr = fso.GetExtensionName(fileName) * 1;
   }
 
-  // Заголовок файла Ramfos
+  // Р—Р°РіРѕР»РѕРІРѕРє С„Р°Р№Р»Р° Ramfos
 
   dest += encode[0xD3]+encode[0xD3]+encode[0xD3];
   dest += (fso.GetBaseName(fileName)+"        ").substr(0,8);
@@ -95,24 +95,24 @@ while(!list.AtEndOfStream) {
   crc = specialistSum(data);  
   dest += encode[crc & 0xFF]+encode[crc >> 8];
 
-  // Файл
+  // Р¤Р°Р№Р»
 
   dest += data;
 
-  // В конце файла указатель на начало
+  // Р’ РєРѕРЅС†Рµ С„Р°Р№Р»Р° СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РЅР°С‡Р°Р»Рѕ
 
   dest += encode[fileStartAddr & 0xFF]+encode[fileStartAddr >> 8];
 }
 
-// В конце диска байт терминатор
+// Р’ РєРѕРЅС†Рµ РґРёСЃРєР° Р±Р°Р№С‚ С‚РµСЂРјРёРЅР°С‚РѕСЂ
 
 dest += encode[8];
 
-// Контроль размера
+// РљРѕРЅС‚СЂРѕР»СЊ СЂР°Р·РјРµСЂР°
 
-if(dest.length > romdiskSize) throw "Слишком много файлов";
+if(dest.length > romdiskSize) throw "РЎР»РёС€РєРѕРј РјРЅРѕРіРѕ С„Р°Р№Р»РѕРІ";
 while(dest.length < romdiskSize) dest += encode[0];
 
-// Сохраняем
+// РЎРѕС…СЂР°РЅСЏРµРј
 
 fso.CreateTextFile("../romdisk.bin", true).Write(dest);

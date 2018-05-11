@@ -1,9 +1,9 @@
 ;+---------------------------------------------------------------------------
 ; RAMFOS
-; Загрузка и запуск MXDOS с дискеты
-; Вызывается при нажатии на F6 из файловой панели
+; Р—Р°РіСЂСѓР·РєР° Рё Р·Р°РїСѓСЃРє MXDOS СЃ РґРёСЃРєРµС‚С‹
+; Р’С‹Р·С‹РІР°РµС‚СЃСЏ РїСЂРё РЅР°Р¶Р°С‚РёРё РЅР° F6 РёР· С„Р°Р№Р»РѕРІРѕР№ РїР°РЅРµР»Рё
 ;
-; 2013-11-01 Дизассемблировано vinxru
+; 2013-11-01 Р”РёР·Р°СЃСЃРµРјР±Р»РёСЂРѕРІР°РЅРѕ vinxru
 ;----------------------------------------------------------------------------
 
 #if NO_MXDOS==0
@@ -12,29 +12,29 @@ MXDOS_ADDR = 0E400h
 
 loadMxDos:	mov	b, a
 
-		; Установка головки и сектора
+		; РЈСЃС‚Р°РЅРѕРІРєР° РіРѕР»РѕРІРєРё Рё СЃРµРєС‚РѕСЂР°
 		mvi	a, 1
 		sta	IO_FLOPPY_HEAD
 		sta	IO_FLOPPY_SECTOR
 
-		; Пауза
+		; РџР°СѓР·Р°
 		mvi	h, 13h
 loadMxDos_0:	 dcx	h
 		 mov	a, l
 		 ora	h
 		jnz	loadMxDos_0
 
-		; Устанавливаем головку
+		; РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј РіРѕР»РѕРІРєСѓ
 		sta	IO_FLOPPY_HEAD
 
-		; Адрес загрузки
+		; РђРґСЂРµСЃ Р·Р°РіСЂСѓР·РєРё
 		lxi	h, MXDOS_ADDR
 
-		; Чтения сектора
+		; Р§С‚РµРЅРёСЏ СЃРµРєС‚РѕСЂР°
 		mvi	a, 90h
 		sta	IO_FLOPPY_CMD
 
-		; Ожидание готовности
+		; РћР¶РёРґР°РЅРёРµ РіРѕС‚РѕРІРЅРѕСЃС‚Рё
 loadMxDos_1:	 lda	IO_FLOPPY_CMD
 		 ral
 		 rc
@@ -42,7 +42,7 @@ loadMxDos_1:	 lda	IO_FLOPPY_CMD
 		 rar
 		jnc	loadMxDos_1
 
-		; Получение данных
+		; РџРѕР»СѓС‡РµРЅРёРµ РґР°РЅРЅС‹С…
 		mvi	c, 13h 
 loadMxDos_2:	  sta	IO_FLOPPY_TRIG
 		  lda	IO_FLOPPY_DATA
@@ -53,7 +53,7 @@ loadMxDos_2:	  sta	IO_FLOPPY_TRIG
 		 dcr	c
 		jp	loadMxDos_2
 
-		; Проверка
+		; РџСЂРѕРІРµСЂРєР°
 		lda	IO_FLOPPY_CMD
 		xri	1
 		ora	a
@@ -61,7 +61,7 @@ loadMxDos_2:	  sta	IO_FLOPPY_TRIG
 		sta	IO_FLOPPY_CMD
 		jnz	dlg_error
 
-		; Проверка
+		; РџСЂРѕРІРµСЂРєР°
 		dcx	h
 		mov	a, m
 		dcx	h
@@ -69,11 +69,11 @@ loadMxDos_2:	  sta	IO_FLOPPY_TRIG
 		cmp	m
 		jnz	dlg_error
 
-		; Запуск MXDOS
+		; Р—Р°РїСѓСЃРє MXDOS
 		.db 078h
 		call	MXDOS_ADDR
 
-		; При выходе из MXDOS выбираем ROM-диск
+		; РџСЂРё РІС‹С…РѕРґРµ РёР· MXDOS РІС‹Р±РёСЂР°РµРј ROM-РґРёСЃРє
 		mvi	b, 80h
 		ret
 #endif

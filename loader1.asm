@@ -1,20 +1,20 @@
 ;----------------------------------------------------------------------------
-; RAMFOS + Специалист MX2
-; Загрузчик
+; RAMFOS + РЎРїРµС†РёР°Р»РёСЃС‚ MX2
+; Р—Р°РіСЂСѓР·С‡РёРє
 ;
-; 2013-11-01 Разработано vinxru
+; 2013-11-01 Р Р°Р·СЂР°Р±РѕС‚Р°РЅРѕ vinxru
 ;----------------------------------------------------------------------------
 
 .include "config.inc"
 
 .org loader1Offset
-		; Глушим таймер
+		; Р“Р»СѓС€РёРј С‚Р°Р№РјРµСЂ
 		LXI H, 0FFEFh
 		MVI M, 03Eh
 		MVI M, 07Eh
 		MVI M, 0BEh
 		
-		; Очищаем экран
+		; РћС‡РёС‰Р°РµРј СЌРєСЂР°РЅ
 		mvi	a, 0F0h
 		sta	0FFF8h
 		lxi	sp, 0BFFFh
@@ -30,25 +30,25 @@ clearLoop:	  push h
 		 dcr d
 		jnz clearLoop
 
-		; Выводим логотип		
-		mvi	a, 0F0h ; Белый		
+		; Р’С‹РІРѕРґРёРј Р»РѕРіРѕС‚РёРї		
+		mvi	a, 0F0h ; Р‘РµР»С‹Р№		
 		lxi     d, logo
 		mvi     h, 091h
 		mvi	c, 44
 		call	logoLine		
-		mvi	a, 0C0h	; Красный
+		mvi	a, 0C0h	; РљСЂР°СЃРЅС‹Р№
 		mvi	c, 2
 		call	logoLine
 		 		
-		; Попытка загрузится с SD
+		; РџРѕРїС‹С‚РєР° Р·Р°РіСЂСѓР·РёС‚СЃСЏ СЃ SD
 .include "sdloader.inc"
 
-		; Копируем RAMFOS
+		; РљРѕРїРёСЂСѓРµРј RAMFOS
 		lxi     b, 0C000h
 		lxi     d, ramfosOffset
 		call	unmlzOffset
 
-		; Запускаем программу сдвига и RAMFOS
+		; Р—Р°РїСѓСЃРєР°РµРј РїСЂРѕРіСЂР°РјРјСѓ СЃРґРІРёРіР° Рё RAMFOS
 		lxi	d, 0D2A0h
 		lxi	h, 0F800h
                 lxi	b, 0FFE0h - 0F800h                

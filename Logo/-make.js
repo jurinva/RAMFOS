@@ -1,21 +1,21 @@
 //----------------------------------------------------------------------------
 // RAMFOS
-// Конвертер логотипа Специалист MX2
+// РљРѕРЅРІРµСЂС‚РµСЂ Р»РѕРіРѕС‚РёРїР° РЎРїРµС†РёР°Р»РёСЃС‚ MX2
 //
-// 2013-11-01 Разработано vinxru
+// 2013-11-01 Р Р°Р·СЂР°Р±РѕС‚Р°РЅРѕ vinxru
 //----------------------------------------------------------------------------
 
-// Стандартная ерунда
+// РЎС‚Р°РЅРґР°СЂС‚РЅР°СЏ РµСЂСѓРЅРґР°
 
 fso = new ActiveXObject("Scripting.FileSystemObject");
 shell = new ActiveXObject("WScript.Shell");
 function kill(name) { if(fso.FileExists(name)) fso.DeleteFile(name); }
 function fileSize(name) { return fso.GetFile(name).Size; }
-function loadAll(name) { return fso.OpenTextFile(name, 1, false, 0).Read(fileSize(name)); } // File.LoadAll глючит 
+function loadAll(name) { return fso.OpenTextFile(name, 1, false, 0).Read(fileSize(name)); } // File.LoadAll РіР»СЋС‡РёС‚ 
 function exec(cmd) { if(shell.Run(cmd, 2, true)) throw cmd; }
 src = loadAll("tbl.bin"); decode = []; encode = []; for(i=0; i<256; i++) { decode[src.charCodeAt(i)] = i; encode[i] = src.charAt(i); }
 
-// Преобразование BIN->INC
+// РџСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ BIN->INC
 
 function bin2inc(src, dest, x) {
   abc = ['0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F' ];
@@ -30,7 +30,7 @@ function bin2inc(src, dest, x) {
   fso.CreateTextFile(dest, true).Write(s);
 }
 
-// Преобразование изображения
+// РџСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ
 
 dest = "";
 

@@ -1,24 +1,24 @@
 //----------------------------------------------------------------------------
 // RAMFOS
-// Распаковка существующего rom-диска
+// Р Р°СЃРїР°РєРѕРІРєР° СЃСѓС‰РµСЃС‚РІСѓСЋС‰РµРіРѕ rom-РґРёСЃРєР°
 //
-// 2013-11-01 Разработано vinxru
+// 2013-11-01 Р Р°Р·СЂР°Р±РѕС‚Р°РЅРѕ vinxru
 //----------------------------------------------------------------------------
 
 romdiskStart = 0xC000;
 unpackStdApps = 1;
 
-// Стандартная ерунда
+// РЎС‚Р°РЅРґР°СЂС‚РЅР°СЏ РµСЂСѓРЅРґР°
 
 fso = new ActiveXObject("Scripting.FileSystemObject");
 shell = new ActiveXObject("WScript.Shell");
 function kill(name) { if(fso.FileExists(name)) fso.DeleteFile(name); }
 function fileSize(name) { return fso.GetFile(name).Size; }
-function loadAll(name) { return fso.OpenTextFile(name, 1, false, 0).Read(fileSize(name)); } // File.LoadAll глючит 
+function loadAll(name) { return fso.OpenTextFile(name, 1, false, 0).Read(fileSize(name)); } // File.LoadAll РіР»СЋС‡РёС‚ 
 function save(fileName, data) { fso.CreateTextFile(fileName).Write(data); }
 src = loadAll("tbl.bin"); encode = []; decode = []; for(i=0; i<256; i++) { encode[i] = src.charAt(i); decode[src.charCodeAt(i)] = i; }
 
-// Удаление прошлых файлов
+// РЈРґР°Р»РµРЅРёРµ РїСЂРѕС€Р»С‹С… С„Р°Р№Р»РѕРІ
 
 ignore = [];
 ignore["romdisk.bin"] = 1;
@@ -36,7 +36,7 @@ for(i=0; i<files.length; i++)
   if(!ignore[files[i].toLowerCase()])
     kill(files[i]);
 
-// Распаковка
+// Р Р°СЃРїР°РєРѕРІРєР°
 
 src = loadAll("romdisk.bin");
 
