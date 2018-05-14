@@ -1,4 +1,4 @@
-# RAMFOS (Release 1.0.0)
+# RAMFOS (Release 1.0)
 
 Operating system RAMFOS for old soviet computer Specialist in MX2 modification
 
